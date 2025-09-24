@@ -1,0 +1,39 @@
+#divine-halo{
+  --bg:#0f1222;
+  --panel:#131735;
+  --ink:#e9ecff;
+  --muted:#9aa4d6;
+  --accent:#7aa7ff;
+  --glow:0 0 40px rgba(122,167,255,.35),0 0 80px rgba(122,167,255,.15);
+  color:var(--ink);
+  background:var(--bg);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+}
+#divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
+#divine-halo .halo-hero{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+#divine-halo .halo-brand{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#7aa7ff,#d1e4ff);box-shadow:var(--glow)}
+#divine-halo h1{margin:0;font-size:28px;letter-spacing:.2px}
+#divine-halo .halo-sub{color:var(--muted);margin-top:6px;max-width:70ch}
+#divine-halo .halo-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+@media (max-width:960px){#divine-halo .halo-grid{grid-template-columns:1fr}}
+#divine-halo .halo-card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 18px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+#divine-halo .halo-card h2{font-size:16px;margin:0 0 10px}
+#divine-halo label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:16px 0 6px}
+#divine-halo select,#divine-halo input[type=text]{width:100%;padding:10px 12px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--ink)}
+#divine-halo .halo-row{display:grid;grid-template-columns:1.2fr .9fr;gap:10px}
+#divine-halo .halo-facet{border:1px dashed rgba(255,255,255,.14);border-radius:12px;padding:12px;margin-bottom:10px}
+#divine-halo .halo-facet header{display:flex;justify-content:space-between;align-items:center}
+#divine-halo .halo-facet-title{font-weight:600}
+#divine-halo .halo-muted{color:var(--muted)}
+#divine-halo .halo-stack{display:flex;flex-wrap:wrap;gap:10px}
+#divine-halo .halo-badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:12px;color:var(--muted)}
+#divine-halo .halo-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(180deg,#1a2149,#121737);
+  border:1px solid rgba(255,255,255,.12);color:var(--ink);padding:10px 14px;border-radius:12px;cursor:pointer}
+#divine-halo .halo-btn:hover{filter:brightness(1.08)}
+#divine-halo .halo-btn-primary{background:linear-gradient(180deg,#3b67ff,#2746b3);box-shadow:var(--glow)}
+#divine-halo .halo-btn-ghost{background:transparent;border:1px dashed rgba(255,255,255,.22)}
+#divine-halo canvas{background:radial-gradient(480px 320px at 50% 50%, rgba(122,167,255,.06), transparent 60%);border-radius:16px}
+#divine-halo .halo-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+#divine-halo .halo-small{font-size:12px}
