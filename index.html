@@ -4,52 +4,56 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Divine H.A.L.O. — Helping Align Leadership Objectives</title>
+  <meta name="description" content="The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every function is growing. Gauge progress, align priorities, and bring a printable snapshot to your next meeting." />
   <link rel="stylesheet" href="style.css" />
-  <!-- Load Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div id="divine-halo">
     <div class="halo-wrap">
+
+      <!-- Hero -->
       <div class="halo-hero">
-        <img src="dam-logo.png" alt="Divine Asset Management" class="halo-brand" />
+        <img src="dam-logo.png.jpg" alt="Divine Asset Management" class="halo-brand" />
         <div>
-          <h1>Divine H.A.L.O. — Helping Align Leadership Objectives</h1>
-          <div class="halo-sub">
-            Snapshot where your team is today. Pick your focus areas, add quick notes,
-            rate status, and print or save your results.
-          </div>
-          <p class="halo-small">
-            The Divine H.A.L.O. is a rapid self-assessment for leadership teams.
-            Choose the pillars that matter now (e.g., Market, Product, Sales),
-            note how you’re measuring progress, and select your current stage.
-            The live chart reveals strengths and attention areas. Print or save
-            the snapshot and bring it to your next meeting.
+          <h1>Divine H.A.L.O.</h1>
+          <h2 class="halo-h2">Helping Align Leadership Objectives</h2>
+
+          <p class="halo-intro">
+            <strong>The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every part of the business is growing.</strong>
+            Use it to gauge progress on near-term and long-range goals and to keep your organization moving in the same direction.
+            Select the functions that matter now—Market, Product, Sales, or any key area. Add a <em>QUICK NOTE</em> on the goals or
+            milestones you’re measuring. Then determine the <em>STAGE</em> those goals are currently at with the drop-down. The live
+            chart instantly shows strengths and focus areas. Save or print the snapshot to bring to your next meeting.
           </p>
         </div>
       </div>
 
       <div class="halo-grid">
+        <!-- Builder -->
         <section class="halo-card">
-          <h2>1) Choose up to 10 Pillars</h2>
-          <div class="halo-small halo-muted">
-            Tip: Rename a pillar or add your own. Stage scale maps to:
-            Emerging = 1, Expanding = 2, Established = 3.
-          </div>
+          <h3>1) Choose up to 10 Functions</h3>
+          <div class="halo-small halo-muted">Tip: Rename a function or add your own. Stages: Early, Advancing, Established.</div>
+
           <div id="facetList"></div>
+
           <div class="halo-stack" style="margin-top:8px">
-            <button class="halo-btn" id="addFacetBtn">+ Add Pillar</button>
-            <button class="halo-btn halo-btn-ghost" id="resetBtn">Reset</button>
+            <button class="halo-btn" id="addFacetBtn">+ Add Function</button>
+            <button class="halo-btn halo-btn-ghost" id="resetBtn">Reset to default functions</button>
           </div>
         </section>
 
+        <!-- Chart -->
         <section class="halo-card">
-          <h2>2) Divine H.A.L.O. Snapshot</h2>
+          <h3>2) Divine H.A.L.O. Snapshot</h3>
+
           <div class="halo-stack" style="justify-content:space-between;align-items:center;margin-bottom:8px">
-            <div class="halo-badge">Scale: 1–3</div>
-            <div class="halo-badge">Radar chart updates live</div>
+            <div class="halo-badge" id="countsBadge">Counts — Early: 0 · Advancing: 0 · Established: 0</div>
+            <div class="halo-badge">Chart updates live</div>
           </div>
-          <canvas id="haloChart" height="340"></canvas>
+
+          <canvas id="haloChart" height="360" aria-label="HALO Chart"></canvas>
+
           <div class="halo-actions">
             <button class="halo-btn" id="copySummaryBtn">Copy Summary</button>
             <button class="halo-btn halo-btn-primary" id="printBtn">Download / Print PDF</button>
@@ -57,12 +61,12 @@
         </section>
       </div>
 
+      <!-- Notes -->
       <section class="halo-card" style="margin-top:18px">
-        <h2>3) Notes Summary (auto-compiled)</h2>
-        <div id="notesOut" class="halo-small halo-muted">
-          Start typing notes for each pillar above — they’ll compile here.
-        </div>
+        <h3>3) Notes Summary (auto-compiled)</h3>
+        <div id="notesOut" class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</div>
       </section>
+
     </div>
   </div>
 
