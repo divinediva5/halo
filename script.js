@@ -1,107 +1,171 @@
 (function(){
-  function waitFor(sel, cb){
-    const t0 = Date.now();
-    const timer = setInterval(()=>{
-      const el = document.querySelector(sel);
-      if (el) { clearInterval(timer); cb(el); }
-      if (Date.now() - t0 > 10000) clearInterval(timer);
-    }, 120);
+  function $(sel, root=document){ return root.querySelector(sel); }
+  function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  const STAGES = [
+    {label:'Early', value:1},
+    {label:'Advancing', value:2},
+    {label:'Established', value:3}
+  ];
+  const DEFAULTS = ['Market','Product','Sales','Marketing','Talent','Finance','Operations','Data & Systems','Partnerships','Customer Success'];
+
+  let functions = DEFAULTS.map(name => ({ name, stage: 1, notes: '' }));
+
+  const root = document.getElementById('divine-halo');
+  const facetList = $('#facetList', root);
+  const notesOut  = $('#notesOut', root);
+  const countsBadge = $('#countsBadge', root);
+  const chartEl   = $('#haloChart', root);
+
+  // Build a function block
+  function makeFunctionRow(fn, idx){
+    const row = document.createElement('div');
+    row.className = 'halo-facet';
+    row.innerHTML = `
+      <header>
+        <div class="halo-facet-title">Function ${idx+1}</div>
+        <button class="halo-btn halo-btn-ghost" data-remove="${idx}">Remove</button>
+      </header>
+
+      <div class="halo-row">
+        <div>
+          <label>Function</label>
+          <input type="text" value="${fn.name}" data-name="${idx}" placeholder="e.g., Market" />
+        </div>
+        <div>
+          <label>Stage</label>
+          <select data-stage="${idx}">
+            ${STAGES.map(s => `<option value="${s.value}" ${s.value===fn.stage?'selected':''}>${s.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+
+      <div class="halo-row halo-row--note">
+        <div>
+          <label>Quick note (what you’re measuring)</label>
+          <input type="text" value="${fn.notes.replace(/"/g,'&quot;')}" data-notes="${idx}" placeholder="KPIs, milestones, blockers" />
+        </div>
+      </div>
+    `;
+    return row;
   }
 
-  waitFor('#divine-halo #facetList', function(){
-    const PRESET = ['Market','Product','Sales','Marketing','Talent','Finance','Operations','Data & Systems','Partnerships','Customer Success'];
-    const STAGES = [{label:'Emerging',value:1},{label:'Expanding',value:2},{label:'Established',value:3}];
-    let pillars = PRESET.map(name => ({ name, stage: 1, notes: '' }));
+  function renderAll(){
+    facetList.innerHTML = '';
+    functions.forEach((fn, i) => facetList.appendChild(makeFunctionRow(fn,i)));
+    updateNotes(); updateCounts(); paintChart();
+  }
 
-    const facetList = document.querySelector('#divine-halo #facetList');
-    const notesOut  = document.querySelector('#divine-halo #notesOut');
-    const chartEl   = document.querySelector('#divine-halo #haloChart');
-    let haloChart   = null;
+  // Update only summary text (no rebuild)
+  function updateNotes(){
+    const out = functions
+      .map(f => `<div><strong>${escapeHtml(f.name)}</strong>: ${escapeHtml(f.notes||'')}</div>`)
+      .join('');
+    notesOut.innerHTML = out || '<span class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</span>';
+  }
 
-    function render(){
-      facetList.innerHTML = '';
-      pillars.forEach((p,i)=>{
-        const row = document.createElement('div');
-        row.className = 'halo-facet';
-        row.innerHTML = `
-          <header><div class="halo-facet-title">Pillar ${i+1}</div>
-          <button class="halo-btn halo-btn-ghost" data-remove="${i}">Remove</button></header>
-          <label>Pillar Name</label>
-          <input type="text" data-name="${i}" value="${p.name}" placeholder="e.g., Market" />
-          <div class="halo-row">
-            <div>
-              <label>Stage</label>
-              <select data-stage="${i}">
-                ${STAGES.map(s=>`<option value="${s.value}" ${s.value===p.stage?'selected':''}>${s.label}</option>`).join('')}
-              </select>
-            </div>
-            <div>
-              <label>Quick Note (what you’re measuring)</label>
-              <input type="text" data-notes="${i}" value="${p.notes.replace(/"/g,'&quot;')}" placeholder="KPIs, milestones, blockers" />
-            </div>
-          </div>`;
-        facetList.appendChild(row);
-      });
-      notesOut.innerHTML = pillars.map(p=>`<div><strong>${p.name}</strong>: ${p.notes||''}</div>`).join('') ||
-        '<span class="halo-small halo-muted">Start typing notes for each pillar above — they’ll compile here.</span>';
-    }
+  // Counts badge
+  function updateCounts(){
+    const c = { 1:0, 2:0, 3:0 };
+    functions.forEach(f => c[f.stage]++);
+    countsBadge.textContent = `Counts — Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
+  }
 
-    function paintChart(){
-      if (!chartEl) return;
-      if (haloChart) { haloChart.destroy(); }
-      haloChart = new Chart(chartEl, {
-        type: 'radar',
-        data: {
-          labels: pillars.map(p=>p.name),
-          datasets: [{
-            label: 'Divine H.A.L.O.',
-            data: pillars.map(p=>p.stage),
-            fill: true, tension: 0.3,
-            backgroundColor: 'rgba(122,167,255,0.25)',
-            borderColor: 'rgba(122,167,255,0.9)',
-            pointBackgroundColor: 'rgba(232,237,255,1)'
-          }]
+  // HALO chart
+  let haloChart = null;
+  function paintChart(){
+    if (haloChart) haloChart.destroy();
+    haloChart = new Chart(chartEl, {
+      type: 'radar',
+      data: {
+        labels: functions.map(f => f.name),
+        datasets: [{
+          label: 'Divine H.A.L.O.',
+          data: functions.map(f => f.stage),
+          fill: true,
+          backgroundColor: 'rgba(255, 191, 0, 0.25)',  // halo fill
+          borderColor: '#ffbf00',                      // halo edge
+          pointBackgroundColor: '#ffbf00',
+          pointBorderColor: '#ffbf00',
+          pointRadius: 3,
+          tension: 0.3
+        }]
+      },
+      options: {
+        plugins: { legend: { display:false } },
+        scales: {
+          r: {
+            beginAtZero: true,
+            min: 0,
+            max: 3,
+            ticks: { display:false },          // hide 1–3 numbers
+            grid:  { color: 'rgba(255, 191, 0, 0.35)', lineWidth: 2 },
+            angleLines: { color: 'rgba(255, 191, 0, 0.20)' },
+            pointLabels: { color:'#1a1e36', font:{ size:13, weight:'600' } }
+          }
         },
-        options: {
-          plugins: { legend: { display:false } },
-          scales: { r: { beginAtZero:true, min:0, max:3, ticks:{ stepSize:1 }, grid:{ color:'rgba(255,255,255,.12)' } } }
+        elements: {
+          line: { borderJoinStyle:'round' }
         }
-      });
+      }
+    });
+  }
+
+  // Event wiring — update fields in place (no full re-render on every keypress)
+  facetList.addEventListener('input', (e)=>{
+    const t = e.target;
+    if (t.hasAttribute('data-name')){
+      const idx = +t.getAttribute('data-name');
+      functions[idx].name = t.value || `Function ${idx+1}`;
+      paintChart();  // update labels
+      updateNotes();
     }
-
-    facetList.addEventListener('input', e=>{
-      const t = e.target;
-      if (t.dataset.name!==undefined)  pillars[+t.dataset.name].name = t.value || `Pillar ${+t.dataset.name+1}`;
-      if (t.dataset.notes!==undefined) pillars[+t.dataset.notes].notes = t.value;
-      if (t.dataset.stage!==undefined) pillars[+t.dataset.stage].stage = +t.value;
-      render(); paintChart();
-    });
-
-    facetList.addEventListener('click', e=>{
-      const btn = e.target.closest('button[data-remove]');
-      if (!btn) return;
-      pillars.splice(+btn.dataset.remove,1);
-      render(); paintChart();
-    });
-
-    document.querySelector('#divine-halo #addFacetBtn').addEventListener('click', ()=>{
-      if (pillars.length >= 10){ alert('You can track up to 10 pillars.'); return; }
-      pillars.push({ name:`Pillar ${pillars.length+1}`, stage:1, notes:'' });
-      render(); paintChart();
-    });
-
-    document.querySelector('#divine-halo #resetBtn').addEventListener('click', ()=>{
-      if (!confirm('Reset to default pillars?')) return;
-      pillars = PRESET.map(name=>({ name, stage:1, notes:'' }));
-      render(); paintChart();
-    });
-
-    document.querySelector('#divine-halo #printBtn').addEventListener('click', ()=> window.print());
-    document.querySelector('#divine-halo #copySummaryBtn').addEventListener('click', ()=>{
-      const lines = pillars.map(p=>`${p.name}: ${['—','Emerging','Expanding','Established'][p.stage]}${p.notes?` — ${p.notes}`:''}`);
-      navigator.clipboard.writeText(`Divine H.A.L.O. Snapshot\n`+lines.join('\n'));
-    });
-
-    render(); paintChart();
+    if (t.hasAttribute('data-notes')){
+      const idx = +t.getAttribute('data-notes');
+      functions[idx].notes = t.value;
+      updateNotes(); // just summary
+    }
+    if (t.hasAttribute('data-stage')){
+      const idx = +t.getAttribute('data-stage');
+      functions[idx].stage = +t.value;
+      updateCounts(); paintChart();
+    }
   });
+
+  facetList.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button[data-remove]');
+    if (!btn) return;
+    const idx = +btn.getAttribute('data-remove');
+    functions.splice(idx,1);
+    renderAll();
+  });
+
+  $('#addFacetBtn', root).addEventListener('click', ()=>{
+    if (functions.length >= 10){ alert('You can track up to 10 functions.'); return; }
+    functions.push({ name:`Function ${functions.length+1}`, stage:1, notes:'' });
+    renderAll();
+  });
+
+  $('#resetBtn', root).addEventListener('click', ()=>{
+    if (!confirm('Reset to default functions?')) return;
+    functions = DEFAULTS.map(name => ({ name, stage:1, notes:'' }));
+    renderAll();
+  });
+
+  $('#printBtn', root).addEventListener('click', ()=> window.print());
+
+  $('#copySummaryBtn', root).addEventListener('click', ()=>{
+    const stageLabel = v => ({1:'Early',2:'Advancing',3:'Established'})[v] || '';
+    const lines = functions.map(f => `${f.name}: ${stageLabel(f.stage)}${f.notes?` — ${f.notes}`:''}`);
+    const text = `Divine H.A.L.O. Snapshot\n` + lines.join('\n');
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn = $('#copySummaryBtn', root);
+      const prev = btn.textContent; btn.textContent = 'Copied!'; setTimeout(()=> btn.textContent = prev, 1200);
+    });
+  });
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+  // initial paint
+  renderAll();
 })();
