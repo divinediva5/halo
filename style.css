@@ -1,84 +1,102 @@
+/* Light theme container */
 #divine-halo{
-  --bg:#0f1222;
-  --panel:#131735;
-  --ink:#e9ecff;
-  --muted:#9aa4d6;
-  --accent:#7aa7ff;
-  --glow:0 0 40px rgba(122,167,255,.35),0 0 80px rgba(122,167,255,.15);
+  --bg:#ffffff;
+  --panel:#f5f7ff;
+  --ink:#0f1222;
+  --muted:#5c69a5;
+  --accent:#2f4dd9;         /* Divine-ish blue */
+  --gold:#ffd54d;           /* Halo yellow */
+  --gold-strong:#ffbf00;    /* brighter halo */
+  --border:#e2e6fb;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color:var(--ink);
   background:var(--bg);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
 }
 
 #divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
-#divine-halo .halo-hero{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+#divine-halo .halo-hero{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+#divine-halo .halo-brand{height:48px;width:auto;display:block}
+#divine-halo h1{margin:0;font-size:30px;letter-spacing:.2px}
+#divine-halo .halo-h2{margin:2px 0 0;font-weight:600;color:var(--muted);font-size:18px}
+#divine-halo .halo-intro{margin:12px 0 0;font-size:16px;line-height:1.55}
 
-/* Logo as an image */
-#divine-halo .halo-brand{
-  height:44px; 
-  width:auto;
-  display:block;
-  border-radius:0;
-  background:none;
-  box-shadow:none;
-}
-@media (min-width:768px){
-  #divine-halo .halo-brand{height:56px;}
-}
-
-#divine-halo h1{margin:0;font-size:28px;letter-spacing:.2px}
-#divine-halo .halo-sub{color:var(--muted);margin-top:6px;max-width:70ch}
 #divine-halo .halo-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
 @media (max-width:960px){#divine-halo .halo-grid{grid-template-columns:1fr}}
 
 #divine-halo .halo-card{
-  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,#fff, #fafbff);
+  border:1px solid var(--border);
   border-radius:16px;
   padding:18px 18px 14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.25)
+  box-shadow:0 8px 20px rgba(23,28,65,.06)
 }
-#divine-halo .halo-card h2{font-size:16px;margin:0 0 10px}
-#divine-halo label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:16px 0 6px}
+#divine-halo .halo-card h3{font-size:16px;margin:0 0 10px}
+#divine-halo .halo-small{font-size:12px}
+#divine-halo .halo-muted{color:#707aac}
+
+#divine-halo label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#6a74a8;margin:12px 0 6px}
 
 #divine-halo select,
 #divine-halo input[type=text]{
   width:100%;
   padding:10px 12px;
   border-radius:10px;
-  border:1px solid rgba(255,255,255,.12);
-  background:rgba(255,255,255,.04);
-  color:var(--ink)
+  border:1px solid var(--border);
+  background:#fff;
+  color:#1a1e36;
+  outline:none;
 }
+#divine-halo select{appearance:auto}
 
-#divine-halo .halo-row{display:grid;grid-template-columns:1.2fr .9fr;gap:10px}
-#divine-halo .halo-facet{border:1px dashed rgba(255,255,255,.14);border-radius:12px;padding:12px;margin-bottom:10px}
+/* Function block */
+#divine-halo .halo-facet{
+  border:1px dashed var(--border);
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:10px;
+  background:#fff;
+}
 #divine-halo .halo-facet header{display:flex;justify-content:space-between;align-items:center}
 #divine-halo .halo-facet-title{font-weight:600}
-#divine-halo .halo-muted{color:var(--muted)}
+
+#divine-halo .halo-row{
+  display:grid;
+  grid-template-columns:1fr 1fr; /* Function + Stage on one row */
+  gap:10px;
+}
+#divine-halo .halo-row + .halo-row{margin-top:10px}
+#divine-halo .halo-row--note{grid-template-columns:1fr} /* Quick note full width */
 
 #divine-halo .halo-stack{display:flex;flex-wrap:wrap;gap:10px}
-#divine-halo .halo-badge{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:12px;color:var(--muted)}
-
-#divine-halo .halo-btn{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:linear-gradient(180deg,#1a2149,#121737);
-  border:1px solid rgba(255,255,255,.12);
-  color:var(--ink);
-  padding:10px 14px;
-  border-radius:12px;
-  cursor:pointer
+#divine-halo .halo-badge{
+  padding:6px 10px;border-radius:999px;border:1px solid var(--border);
+  font-size:12px;color:#4a5390;background:#fff
 }
-#divine-halo .halo-btn:hover{filter:brightness(1.08)}
-#divine-halo .halo-btn-primary{background:linear-gradient(180deg,#3b67ff,#2746b3);box-shadow:var(--glow)}
-#divine-halo .halo-btn-ghost{background:transparent;border:1px dashed rgba(255,255,255,.22)}
+#divine-halo .halo-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(180deg,#e8ecff,#dbe2ff);
+  border:1px solid var(--border);
+  color:#1a1f47;padding:10px 14px;border-radius:12px;cursor:pointer
+}
+#divine-halo .halo-btn:hover{filter:brightness(1.03)}
+#divine-halo .halo-btn-primary{
+  background:linear-gradient(180deg,#3555ff,#2b45c9);
+  color:#fff;border-color:#2238ad
+}
+#divine-halo .halo-btn-ghost{background:#fff;border-style:dashed}
 
 #divine-halo canvas{
-  background:radial-gradient(480px 320px at 50% 50%, rgba(122,167,255,.06), transparent 60%);
-  border-radius:16px
+  background:
+    radial-gradient(420px 280px at 50% 50%, rgba(255,223,88,.08), transparent 65%),
+    #fff;
+  border-radius:16px;
+  border:1px solid var(--border);
 }
 
-#divine-halo .halo-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
-#divine-halo .halo-small{font-size:12px}
+/* Print: put chart first, then the list */
+@media print{
+  #divine-halo .halo-grid{grid-template-columns:1fr;gap:12px}
+  #divine-halo .halo-actions{display:none}
+  #divine-halo .halo-hero, #divine-halo .halo-stack{display:none}
+  #divine-halo body{background:#fff}
+}
