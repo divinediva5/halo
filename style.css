@@ -15,7 +15,7 @@
 
 #divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
 
-/* Logo sits above hero — smaller and right-aligned */
+/* Logo: smaller, right-aligned */
 #divine-halo .halo-brand{
   width:120px;
   height:auto;
@@ -28,13 +28,11 @@
 #divine-halo .halo-hero{display:block;margin-bottom:18px}
 #divine-halo .halo-hero-title{
   margin:0 0 2px 0;
-  font-family:"Cinzel", serif;         /* majestic serif */
-  font-weight:700;
+  font-family:"Michroma", system-ui, sans-serif; /* close to logo */
+  font-weight:400;
   font-size:36px;
-  color:#fff;                          /* white fill */
-  -webkit-text-stroke: 1px #000;       /* black outline */
-  text-stroke: 1px #000;
-  letter-spacing:.5px;
+  letter-spacing:.06em;
+  color:#111; /* solid, logo-like */
 }
 #divine-halo .halo-h2{margin:2px 0 0;font-weight:600;color:var(--muted);font-size:18px}
 #divine-halo .halo-intro{margin:12px 0 0;font-size:16px;line-height:1.55}
@@ -58,7 +56,7 @@
 #divine-halo label{
   display:block;
   font-size:14px;
-  font-weight:700;              /* bold */
+  font-weight:700;
   text-transform:uppercase;
   letter-spacing:.10em;
   color:#6a74a8;
@@ -79,9 +77,7 @@
 #divine-halo select{appearance:auto}
 
 /* Make Quick Notes content italic */
-#divine-halo .halo-row--note input[type=text]{
-  font-style: italic;
-}
+#divine-halo .halo-row--note input[type=text]{ font-style: italic; }
 
 /* Function block */
 #divine-halo .halo-facet{
@@ -95,7 +91,7 @@
 /* Function + Stage row: prevent bumping by fixing Stage width */
 #divine-halo .halo-row{
   display:grid;
-  grid-template-columns: 1fr 220px;   /* Function grows, Stage fixed */
+  grid-template-columns: 1fr 220px;
   gap:12px;
 }
 @media (max-width:720px){
@@ -136,7 +132,7 @@
   #divine-halo #haloChart{ height:44vh; max-height:360px; min-height:240px }
 }
 
-/* Print: put chart first, then list; hide action buttons */
+/* Print */
 @media print{
   #divine-halo .halo-grid{grid-template-columns:1fr;gap:12px}
   #divine-halo .halo-actions{display:none}
