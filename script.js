@@ -17,6 +17,7 @@
     { name:'Systems & Compliance',  placeholder:'i.e., processes, technology, and legal/industry standards' }
   ];
 
+  // All stages default to Early (1)
   let functions = DEFAULTS.map(d => ({ name:d.name, stage:1, notes:'' , placeholder:d.placeholder }));
 
   const facetList = $('#facetList');
@@ -24,7 +25,7 @@
   const countsBadge = $('#countsBadge');
   const chartEl   = $('#haloChart');
 
-  // Build one block (no "Function 1/2" header)
+  // Build one block
   function makeFunctionRow(fn, idx){
     const row = document.createElement('div');
     row.className = 'halo-facet';
@@ -77,24 +78,40 @@
     countsBadge.textContent = `Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
   }
 
-  // Chart (circular halo: three rings at 1, 2, 3; no spokes)
+  // Label wrapping for the radar (stack long labels / break on " & ")
+  function wrapLabel(label){
+    if (!label) return label;
+    if (label.includes(' & ')) return label.replace(' & ', ' &\n');
+    // generic wrap: split near middle on space if very long
+    if (label.length > 18){
+      const mid = Math.floor(label.length/2);
+      const leftSpace = label.lastIndexOf(' ', mid);
+      if (leftSpace > 0) return label.slice(0,leftSpace) + '\n' + label.slice(leftSpace+1);
+    }
+    return label;
+  }
+
+  // Chart (circular halo: small Early circle + two larger rings; no spokes)
   let haloChart = null;
   function paintChart(){
     if (haloChart) haloChart.destroy();
 
+    const labels = functions.map(f => f.name);
+    const data = functions.map(f => f.stage);
+
     haloChart = new Chart(chartEl, {
       type: 'radar',
       data: {
-        labels: functions.map(f => f.name),
+        labels: labels,
         datasets: [{
           label: 'Divine H.A.L.O.',
-          data: functions.map(f => f.stage),
+          data: data,
           fill: true,
           backgroundColor: 'rgba(255,191,0,0.25)',  // halo fill
           borderColor: '#ffbf00',                    // halo edge
           pointBackgroundColor: '#ffbf00',
           pointBorderColor: '#ffbf00',
-          pointRadius: 0,                            // hide points
+          pointRadius: 0,
           tension: 0.3
         }]
       },
@@ -104,26 +121,28 @@
         plugins: { legend: { display:false } },
         scales: {
           r: {
-            beginAtZero: false,
-            min: 1,                // start at 1 (no tiny inner ring)
-            max: 3,                // end at 3
-            ticks: {
-              stepSize: 1,
-              display: false
-            },
+            // Use 0..3 ticks so we can hide the 0 ring and show 1,2,3 (3 circles)
+            min: 0,
+            max: 3,
+            beginAtZero: true,
+            ticks: { stepSize: 1, display: false },
             angleLines: { display: false }, // hide spiderweb spokes
             grid: {
-              circular: true,      // <-- circles, not polygons
-              color: () => '#ffbf00',
+              circular: true,               // circles not polygons
+              color: (ctx) => {
+                // Hide the 0 baseline; draw 1,2,3 in gold
+                return ctx.index === 0 ? 'rgba(0,0,0,0)' : '#ffbf00';
+              },
               lineWidth: (ctx) => {
-                // Make the outer ring a touch thicker
-                const last = ctx.chart.scales.r.ticks.length - 1; // 0..2 for [1,2,3]
-                return ctx.index === last ? 4 : 2;
+                const last = ctx.chart.scales.r.ticks.length - 1; // 0..3
+                if (ctx.index === 0) return 0;  // hide inner baseline at 0
+                return ctx.index === last ? 4 : 2; // thicker outer ring
               }
             },
             pointLabels:{
               color:'#1a1e36',
-              font: ctx => {
+              callback: (val) => wrapLabel(val),   // stack labels
+              font: (ctx) => {
                 const w = ctx.chart.width;
                 return { size: w < 420 ? 11 : 13, weight:'600' };
               }
@@ -134,7 +153,7 @@
     });
   }
 
-  // Event wiring (update in place — no cursor jump)
+  // Event wiring
   facetList.addEventListener('input', (e)=>{
     const t = e.target;
     if (t.hasAttribute('data-name')){
