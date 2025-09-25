@@ -80,23 +80,24 @@
 
   /* ---------- Chart ---------- */
 
-  // Stack long labels (and break after " & ")
-  function stackLabel(label){
-    if (!label) return label;
-    if (label.includes(' & ')) return label.replace(' & ', ' &\n');
-    if (label.length > 18){
-      const mid = Math.floor(label.length/2);
-      const cut = label.lastIndexOf(' ', mid);
-      if (cut > 0) return label.slice(0,cut) + '\n' + label.slice(cut+1);
+  // Return an ARRAY of lines (Chart.js multiline labels)
+  function stackedLines(label){
+    if (!label) return [""];
+    let s = label;
+    if (s.includes(' & ')) s = s.replace(' & ', ' &\n');
+    if (s.length > 18){
+      const mid = Math.floor(s.length/2);
+      const cut = s.lastIndexOf(' ', mid);
+      if (cut > 0) s = s.slice(0,cut) + '\n' + s.slice(cut+1);
     }
-    return label;
+    return s.split('\n'); // <- array of lines
   }
 
   let haloChart = null;
   function paintChart(){
     if (haloChart) haloChart.destroy();
 
-    const labels = functions.map(f => stackLabel(f.name)); // << inject newlines
+    const labels = functions.map(f => stackedLines(f.name));
     const data = functions.map(f => f.stage);
 
     haloChart = new Chart(chartEl, {
@@ -122,7 +123,6 @@
         plugins: { legend: { display:false } },
         scales: {
           r: {
-            // Show three visible rings (1,2,3); hide 0 baseline so the inner "Early" is a small golden circle
             min: 0,
             max: 3,
             beginAtZero: true,
@@ -133,8 +133,8 @@
               color: (ctx) => ctx.index === 0 ? 'rgba(0,0,0,0)' : '#ffbf00',
               lineWidth: (ctx) => {
                 const last = ctx.chart.scales.r.ticks.length - 1; // 0..3
-                if (ctx.index === 0) return 0;  // hide 0
-                return ctx.index === last ? 4 : 2; // thicker outer ring
+                if (ctx.index === 0) return 0;               // hide 0
+                return ctx.index === last ? 4 : 2;           // thicker outer ring
               }
             },
             pointLabels:{
