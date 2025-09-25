@@ -4,9 +4,9 @@
   --panel:#f5f7ff;
   --ink:#0f1222;
   --muted:#5c69a5;
-  --accent:#2f4dd9;         /* Divine-ish blue */
-  --gold:#ffd54d;           /* Halo yellow */
-  --gold-strong:#ffbf00;    /* brighter halo */
+  --accent:#2f4dd9;        /* brand-ish blue */
+  --gold:#ffd54d;          /* halo yellow */
+  --gold-strong:#ffbf00;   /* brighter halo */
   --border:#e2e6fb;
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color:var(--ink);
@@ -14,8 +14,11 @@
 }
 
 #divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
-#divine-halo .halo-hero{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
-#divine-halo .halo-brand{height:48px;width:auto;display:block}
+
+/* Logo sits above hero, no indent */
+#divine-halo .halo-brand{height:48px;width:auto;display:block;margin:0 0 8px 0}
+
+#divine-halo .halo-hero{display:block;margin-bottom:18px}
 #divine-halo h1{margin:0;font-size:30px;letter-spacing:.2px}
 #divine-halo .halo-h2{margin:2px 0 0;font-weight:600;color:var(--muted);font-size:18px}
 #divine-halo .halo-intro{margin:12px 0 0;font-size:16px;line-height:1.55}
@@ -56,17 +59,17 @@
   margin-bottom:10px;
   background:#fff;
 }
-#divine-halo .halo-facet header{display:flex;justify-content:space-between;align-items:center}
-#divine-halo .halo-facet-title{font-weight:600}
 
+/* Function + Stage row */
 #divine-halo .halo-row{
   display:grid;
-  grid-template-columns:1fr 1fr; /* Function + Stage on one row */
+  grid-template-columns:1.2fr .8fr;
   gap:10px;
 }
-#divine-halo .halo-row + .halo-row{margin-top:10px}
-#divine-halo .halo-row--note{grid-template-columns:1fr} /* Quick note full width */
+/* Quick note full width beneath */
+#divine-halo .halo-row--note{grid-template-columns:1fr;margin-top:10px}
 
+/* Buttons & badges */
 #divine-halo .halo-stack{display:flex;flex-wrap:wrap;gap:10px}
 #divine-halo .halo-badge{
   padding:6px 10px;border-radius:999px;border:1px solid var(--border);
@@ -85,18 +88,21 @@
 }
 #divine-halo .halo-btn-ghost{background:#fff;border-style:dashed}
 
+/* Chart */
 #divine-halo canvas{
-  background:
-    radial-gradient(420px 280px at 50% 50%, rgba(255,223,88,.08), transparent 65%),
-    #fff;
+  background:#fff;
   border-radius:16px;
   border:1px solid var(--border);
 }
+/* responsive chart size */
+#divine-halo #haloChart{ width:100%; height:48vh; max-height:420px; min-height:260px }
+@media (max-width:720px){
+  #divine-halo #haloChart{ height:44vh; max-height:360px; min-height:240px }
+}
 
-/* Print: put chart first, then the list */
+/* Print: put chart first, then list; hide action buttons */
 @media print{
   #divine-halo .halo-grid{grid-template-columns:1fr;gap:12px}
   #divine-halo .halo-actions{display:none}
-  #divine-halo .halo-hero, #divine-halo .halo-stack{display:none}
-  #divine-halo body{background:#fff}
+  #divine-halo .halo-stack{display:none}
 }
