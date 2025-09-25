@@ -1,36 +1,38 @@
 (function(){
-  function $(sel, root=document){ return root.querySelector(sel); }
-  function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  const root = document.getElementById('divine-halo');
+  const $ = (sel, r=root) => r.querySelector(sel);
 
+  // Stages and defaults (6 functions with helpful placeholders)
   const STAGES = [
     {label:'Early', value:1},
     {label:'Advancing', value:2},
     {label:'Established', value:3}
   ];
-  const DEFAULTS = ['Market','Product','Sales','Marketing','Talent','Finance','Operations','Data & Systems','Partnerships','Customer Success'];
+  const DEFAULTS = [
+    { name:'Customers & Community', placeholder:'i.e., clarity on ideal customer profiles and verticals' },
+    { name:'Products & Services',   placeholder:'i.e., breadth/depth of product, how well it meets customer needs' },
+    { name:'Sales & Growth',        placeholder:'i.e., channels, partner ecosystem, marketing, pricing, consistency' },
+    { name:'People & Culture',      placeholder:'i.e., org structure, hiring pipeline, culture for scale' },
+    { name:'Money & Resources',     placeholder:'i.e., financial stability, access to capital, reinvestment for growth' },
+    { name:'Systems & Compliance',  placeholder:'i.e., processes, technology, and legal/industry standards' }
+  ];
 
-  let functions = DEFAULTS.map(name => ({ name, stage: 1, notes: '' }));
+  let functions = DEFAULTS.map(d => ({ name:d.name, stage:1, notes:'' , placeholder:d.placeholder }));
 
-  const root = document.getElementById('divine-halo');
-  const facetList = $('#facetList', root);
-  const notesOut  = $('#notesOut', root);
-  const countsBadge = $('#countsBadge', root);
-  const chartEl   = $('#haloChart', root);
+  const facetList = $('#facetList');
+  const notesOut  = $('#notesOut');
+  const countsBadge = $('#countsBadge');
+  const chartEl   = $('#haloChart');
 
-  // Build a function block
+  // Build one block (no "Function 1/2" header)
   function makeFunctionRow(fn, idx){
     const row = document.createElement('div');
     row.className = 'halo-facet';
     row.innerHTML = `
-      <header>
-        <div class="halo-facet-title">Function ${idx+1}</div>
-        <button class="halo-btn halo-btn-ghost" data-remove="${idx}">Remove</button>
-      </header>
-
       <div class="halo-row">
         <div>
           <label>Function</label>
-          <input type="text" value="${fn.name}" data-name="${idx}" placeholder="e.g., Market" />
+          <input type="text" value="${fn.name}" data-name="${idx}" placeholder="e.g., Customers & Community" />
         </div>
         <div>
           <label>Stage</label>
@@ -43,8 +45,12 @@
       <div class="halo-row halo-row--note">
         <div>
           <label>Quick note (what you’re measuring)</label>
-          <input type="text" value="${fn.notes.replace(/"/g,'&quot;')}" data-notes="${idx}" placeholder="KPIs, milestones, blockers" />
+          <input type="text" value="${fn.notes.replace(/"/g,'&quot;')}" data-notes="${idx}" placeholder="${(fn.placeholder||'KPIs, milestones, blockers').replace(/"/g,'&quot;')}" />
         </div>
+      </div>
+
+      <div class="halo-stack" style="margin-top:8px">
+        <button class="halo-btn halo-btn-ghost" data-remove="${idx}">Remove</button>
       </div>
     `;
     return row;
@@ -56,25 +62,26 @@
     updateNotes(); updateCounts(); paintChart();
   }
 
-  // Update only summary text (no rebuild)
+  // Notes include Stage now
   function updateNotes(){
+    const stageLabel = v => ({1:'Early',2:'Advancing',3:'Established'})[v] || '';
     const out = functions
-      .map(f => `<div><strong>${escapeHtml(f.name)}</strong>: ${escapeHtml(f.notes||'')}</div>`)
+      .map(f => `<div><strong>${escapeHtml(f.name)}</strong>: ${stageLabel(f.stage)}${f.notes?` — ${escapeHtml(f.notes)}`:''}</div>`)
       .join('');
     notesOut.innerHTML = out || '<span class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</span>';
   }
 
-  // Counts badge
   function updateCounts(){
-    const c = { 1:0, 2:0, 3:0 };
+    const c = {1:0,2:0,3:0};
     functions.forEach(f => c[f.stage]++);
-    countsBadge.textContent = `Counts — Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
+    countsBadge.textContent = `Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
   }
 
-  // HALO chart
+  // Chart (circular halo: no spokes, yellow rings, thicker outer ring)
   let haloChart = null;
   function paintChart(){
     if (haloChart) haloChart.destroy();
+
     haloChart = new Chart(chartEl, {
       type: 'radar',
       data: {
@@ -83,52 +90,64 @@
           label: 'Divine H.A.L.O.',
           data: functions.map(f => f.stage),
           fill: true,
-          backgroundColor: 'rgba(255, 191, 0, 0.25)',  // halo fill
-          borderColor: '#ffbf00',                      // halo edge
+          backgroundColor: 'rgba(255,191,0,0.25)',  // halo fill
+          borderColor: '#ffbf00',                    // halo edge
           pointBackgroundColor: '#ffbf00',
           pointBorderColor: '#ffbf00',
-          pointRadius: 3,
+          pointRadius: 0,                            // hide points
           tension: 0.3
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: { legend: { display:false } },
         scales: {
           r: {
-            beginAtZero: true,
-            min: 0,
-            max: 3,
-            ticks: { display:false },          // hide 1–3 numbers
-            grid:  { color: 'rgba(255, 191, 0, 0.35)', lineWidth: 2 },
-            angleLines: { color: 'rgba(255, 191, 0, 0.20)' },
-            pointLabels: { color:'#1a1e36', font:{ size:13, weight:'600' } }
+            beginAtZero:true,
+            min:0,
+            max:3,
+            ticks:{ display:false },
+            angleLines:{ display:false }, // hide spiderweb spokes
+            grid:{
+              color: ctx => '#ffbf00',     // all rings yellow
+              lineWidth: ctx => {
+                // make outer ring thicker
+                const { index, chart } = ctx;
+                const last = chart.scales.r.ticks.length - 1;
+                return index === last ? 4 : 2;
+              }
+            },
+            pointLabels:{
+              color:'#1a1e36',
+              font: ctx => {
+                const w = ctx.chart.width;
+                return { size: w < 420 ? 11 : 13, weight:'600' };
+              }
+            }
           }
-        },
-        elements: {
-          line: { borderJoinStyle:'round' }
         }
       }
     });
   }
 
-  // Event wiring — update fields in place (no full re-render on every keypress)
+  // Event wiring (update in place — no cursor jump)
   facetList.addEventListener('input', (e)=>{
     const t = e.target;
     if (t.hasAttribute('data-name')){
       const idx = +t.getAttribute('data-name');
       functions[idx].name = t.value || `Function ${idx+1}`;
-      paintChart();  // update labels
-      updateNotes();
+      paintChart(); updateNotes();
     }
     if (t.hasAttribute('data-notes')){
       const idx = +t.getAttribute('data-notes');
       functions[idx].notes = t.value;
-      updateNotes(); // just summary
+      updateNotes();
     }
     if (t.hasAttribute('data-stage')){
       const idx = +t.getAttribute('data-stage');
       functions[idx].stage = +t.value;
-      updateCounts(); paintChart();
+      updateCounts(); paintChart(); updateNotes();
     }
   });
 
@@ -140,32 +159,22 @@
     renderAll();
   });
 
-  $('#addFacetBtn', root).addEventListener('click', ()=>{
+  $('#addFacetBtn').addEventListener('click', ()=>{
     if (functions.length >= 10){ alert('You can track up to 10 functions.'); return; }
-    functions.push({ name:`Function ${functions.length+1}`, stage:1, notes:'' });
+    functions.push({ name:`Function ${functions.length+1}`, stage:1, notes:'', placeholder:'KPIs, milestones, blockers' });
     renderAll();
   });
 
-  $('#resetBtn', root).addEventListener('click', ()=>{
+  $('#resetBtn').addEventListener('click', ()=>{
     if (!confirm('Reset to default functions?')) return;
-    functions = DEFAULTS.map(name => ({ name, stage:1, notes:'' }));
+    functions = DEFAULTS.map(d => ({ name:d.name, stage:1, notes:'', placeholder:d.placeholder }));
     renderAll();
   });
 
-  $('#printBtn', root).addEventListener('click', ()=> window.print());
-
-  $('#copySummaryBtn', root).addEventListener('click', ()=>{
-    const stageLabel = v => ({1:'Early',2:'Advancing',3:'Established'})[v] || '';
-    const lines = functions.map(f => `${f.name}: ${stageLabel(f.stage)}${f.notes?` — ${f.notes}`:''}`);
-    const text = `Divine H.A.L.O. Snapshot\n` + lines.join('\n');
-    navigator.clipboard.writeText(text).then(()=>{
-      const btn = $('#copySummaryBtn', root);
-      const prev = btn.textContent; btn.textContent = 'Copied!'; setTimeout(()=> btn.textContent = prev, 1200);
-    });
-  });
+  $('#printBtn').addEventListener('click', ()=> window.print());
 
   function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-  // initial paint
+  // Initial paint
   renderAll();
 })();
