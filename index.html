@@ -6,6 +6,7 @@
   <title>Divine H.A.L.O. — Helping Align Leadership Objectives</title>
   <meta name="description" content="The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every function is growing. Gauge progress, align priorities, and bring a printable snapshot to your next meeting." />
   <link rel="stylesheet" href="style.css" />
+  <!-- Chart.js v4 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -34,36 +35,36 @@
 
       <div class="halo-grid">
         <!-- Builder -->
-        <section class="halo-card">
+        <section class="halo-card" aria-label="HALO Builder">
           <h3>Choose up to 10 Functions</h3>
           <div class="halo-small halo-muted">Tip: Rename a function or add your own. Stages: Early, Advancing, Established.</div>
 
           <div id="facetList"></div>
 
           <div class="halo-stack" style="margin-top:8px">
-            <button class="halo-btn" id="addFacetBtn">+ Add Function</button>
-            <button class="halo-btn halo-btn-ghost" id="resetBtn">Reset to default functions</button>
+            <button class="halo-btn" id="addFacetBtn" type="button">+ Add Function</button>
+            <button class="halo-btn halo-btn-ghost" id="resetBtn" type="button">Reset to default functions</button>
           </div>
         </section>
 
         <!-- Chart -->
-        <section class="halo-card">
+        <section class="halo-card" aria-label="HALO Snapshot">
           <h3>Divine H.A.L.O. Snapshot</h3>
 
           <div class="halo-stack" style="justify-content:space-between;align-items:center;margin-bottom:8px">
             <div class="halo-badge" id="countsBadge">Early: 0 · Advancing: 0 · Established: 0</div>
           </div>
 
-          <canvas id="haloChart" aria-label="HALO Chart"></canvas>
+          <canvas id="haloChart" aria-label="HALO Chart" role="img"></canvas>
 
-          <div class="halo-actions">
-            <button class="halo-btn halo-btn-primary" id="printBtn">Download / Print PDF</button>
+          <div class="halo-actions" style="margin-top:10px">
+            <button class="halo-btn halo-btn-primary" id="printBtn" type="button">Download / Print PDF</button>
           </div>
         </section>
       </div>
 
       <!-- Notes -->
-      <section class="halo-card" style="margin-top:18px">
+      <section class="halo-card" style="margin-top:18px" aria-label="Notes Summary">
         <h3>Notes Summary</h3>
         <div id="notesOut" class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</div>
       </section>
