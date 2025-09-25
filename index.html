@@ -12,9 +12,11 @@
   <div id="divine-halo">
     <div class="halo-wrap">
 
+      <!-- Logo (separate row so it doesn't indent hero text) -->
+      <img src="dam-logo.png.jpg" alt="Divine Asset Management" class="halo-brand" />
+
       <!-- Hero -->
       <div class="halo-hero">
-        <img src="dam-logo.png.jpg" alt="Divine Asset Management" class="halo-brand" />
         <div>
           <h1>Divine H.A.L.O.</h1>
           <h2 class="halo-h2">Helping Align Leadership Objectives</h2>
@@ -22,9 +24,10 @@
           <p class="halo-intro">
             <strong>The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every part of the business is growing.</strong>
             Use it to gauge progress on near-term and long-range goals and to keep your organization moving in the same direction.
-            Select the functions that matter now—Market, Product, Sales, or any key area. Add a <em>QUICK NOTE</em> on the goals or
-            milestones you’re measuring. Then determine the <em>STAGE</em> those goals are currently at with the drop-down. The live
-            chart instantly shows strengths and focus areas. Save or print the snapshot to bring to your next meeting.
+            <strong>Select the Functions that matter now—Customers &amp; Community, Products &amp; Services, or any key area.</strong>
+            <strong>Add a <em>QUICK NOTE</em> on the goals or milestones your team is measuring.</strong>
+            <strong>Then determine the <em>STAGE</em> those goals are currently at with the drop-down.</strong>
+            The live chart instantly shows strengths and focus areas. Save or print the snapshot to bring to your next meeting.
           </p>
         </div>
       </div>
@@ -32,7 +35,7 @@
       <div class="halo-grid">
         <!-- Builder -->
         <section class="halo-card">
-          <h3>1) Choose up to 10 Functions</h3>
+          <h3>Choose up to 10 Functions</h3>
           <div class="halo-small halo-muted">Tip: Rename a function or add your own. Stages: Early, Advancing, Established.</div>
 
           <div id="facetList"></div>
@@ -45,17 +48,15 @@
 
         <!-- Chart -->
         <section class="halo-card">
-          <h3>2) Divine H.A.L.O. Snapshot</h3>
+          <h3>Divine H.A.L.O. Snapshot</h3>
 
           <div class="halo-stack" style="justify-content:space-between;align-items:center;margin-bottom:8px">
-            <div class="halo-badge" id="countsBadge">Counts — Early: 0 · Advancing: 0 · Established: 0</div>
-            <div class="halo-badge">Chart updates live</div>
+            <div class="halo-badge" id="countsBadge">Early: 0 · Advancing: 0 · Established: 0</div>
           </div>
 
-          <canvas id="haloChart" height="360" aria-label="HALO Chart"></canvas>
+          <canvas id="haloChart" aria-label="HALO Chart"></canvas>
 
           <div class="halo-actions">
-            <button class="halo-btn" id="copySummaryBtn">Copy Summary</button>
             <button class="halo-btn halo-btn-primary" id="printBtn">Download / Print PDF</button>
           </div>
         </section>
@@ -63,7 +64,7 @@
 
       <!-- Notes -->
       <section class="halo-card" style="margin-top:18px">
-        <h3>3) Notes Summary (auto-compiled)</h3>
+        <h3>Notes Summary</h3>
         <div id="notesOut" class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</div>
       </section>
 
