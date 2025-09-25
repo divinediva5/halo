@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Divine H.A.L.O. — Helping Align Leadership Objectives</title>
   <meta name="description" content="The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every function is growing. Gauge progress, align priorities, and bring a printable snapshot to your next meeting." />
+
+  <!-- Favicon (replace with your file name if different) -->
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="shortcut icon" href="favicon.png" type="image/png" />
+
+  <!-- Hero font for a more 'majestic' title -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css" />
   <!-- Chart.js v4 -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -13,65 +21,15 @@
   <div id="divine-halo">
     <div class="halo-wrap">
 
-      <!-- Logo (separate row so it doesn't indent hero text) -->
+      <!-- Logo -->
       <img src="dam-logo.png.jpg" alt="Divine Asset Management" class="halo-brand" />
 
       <!-- Hero -->
       <div class="halo-hero">
         <div>
-          <h1>Divine H.A.L.O.</h1>
+          <h1 class="halo-hero-title">DIVINE H.A.L.O.</h1>
           <h2 class="halo-h2">Helping Align Leadership Objectives</h2>
 
           <p class="halo-intro">
             <strong>The Divine H.A.L.O. gives leadership teams a single, visual snapshot of how every part of the business is growing.</strong>
-            Use it to gauge progress on near-term and long-range goals and to keep your organization moving in the same direction.
-            <strong>Select the Functions that matter now—Customers &amp; Community, Products &amp; Services, or any key area.</strong>
-            <strong>Add a <em>QUICK NOTE</em> on the goals or milestones your team is measuring.</strong>
-            <strong>Then determine the <em>STAGE</em> those goals are currently at with the drop-down.</strong>
-            The live chart instantly shows strengths and focus areas. Save or print the snapshot to bring to your next meeting.
-          </p>
-        </div>
-      </div>
-
-      <div class="halo-grid">
-        <!-- Builder -->
-        <section class="halo-card" aria-label="HALO Builder">
-          <h3>Choose up to 10 Functions</h3>
-          <div class="halo-small halo-muted">Tip: Rename a function or add your own. Stages: Early, Advancing, Established.</div>
-
-          <div id="facetList"></div>
-
-          <div class="halo-stack" style="margin-top:8px">
-            <button class="halo-btn" id="addFacetBtn" type="button">+ Add Function</button>
-            <button class="halo-btn halo-btn-ghost" id="resetBtn" type="button">Reset to default functions</button>
-          </div>
-        </section>
-
-        <!-- Chart -->
-        <section class="halo-card" aria-label="HALO Snapshot">
-          <h3>Divine H.A.L.O. Snapshot</h3>
-
-          <div class="halo-stack" style="justify-content:space-between;align-items:center;margin-bottom:8px">
-            <div class="halo-badge" id="countsBadge">Early: 0 · Advancing: 0 · Established: 0</div>
-          </div>
-
-          <canvas id="haloChart" aria-label="HALO Chart" role="img"></canvas>
-
-          <div class="halo-actions" style="margin-top:10px">
-            <button class="halo-btn halo-btn-primary" id="printBtn" type="button">Download / Print PDF</button>
-          </div>
-        </section>
-      </div>
-
-      <!-- Notes -->
-      <section class="halo-card" style="margin-top:18px" aria-label="Notes Summary">
-        <h3>Notes Summary</h3>
-        <div id="notesOut" class="halo-small halo-muted">Start typing notes for each function above — they’ll compile here.</div>
-      </section>
-
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+            Use it to gauge progress on near-term and long-range goals and to keep your organization moving in t
