@@ -28,13 +28,19 @@
 #divine-halo .halo-hero{display:block;margin-bottom:18px}
 #divine-halo .halo-hero-title{
   margin:0 0 2px 0;
-  font-family:"Michroma", system-ui, sans-serif; /* close to logo */
+  font-family:"Michroma", system-ui, sans-serif;
   font-weight:400;
   font-size:36px;
   letter-spacing:.06em;
-  color:#111; /* solid, logo-like */
+  color:#111;
 }
-#divine-halo .halo-h2{margin:2px 0 0;font-weight:600;color:var(--muted);font-size:18px}
+#divine-halo .halo-h2{
+  margin:2px 0 0;
+  font-family:"Michroma", system-ui, sans-serif; /* Michroma subhead */
+  font-weight:400;
+  color:var(--muted);
+  font-size:18px;
+}
 #divine-halo .halo-intro{margin:12px 0 0;font-size:16px;line-height:1.55}
 
 /* Cards & grid */
