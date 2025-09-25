@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Access the Divine H.A.L.O.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  <main style="max-width:600px;margin:2rem auto;font-family:sans-serif;">
+    <h1>Access the Divine H.A.L.O.</h1>
+    <p>
+      Enter your email to unlock the Divine H.A.L.O.—a snapshot of your business growth journey.
+    </p>
+
+    <!-- HubSpot form embed -->
+    <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
+    <div id="hs-form"></div>
+    <script>
+      hbspt.forms.create({
+        region: "na1",                 // check in HubSpot embed snippet
+        portalId: "YOUR_PORTAL_ID",    // replace with your portal ID
+        formId: "YOUR_FORM_ID",        // replace with your form ID
+        target: "#hs-form"
+      });
+    </script>
+
+    <p style="font-size:0.8rem;margin-top:1rem;">
+      By continuing, you agree to our <a href="/privacy">Privacy Policy</a>.
+    </p>
+  </main>
+</body>
+</html>
