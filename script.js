@@ -25,7 +25,8 @@
   const countsBadge = $('#countsBadge');
   const chartEl   = $('#haloChart');
 
-  // Build one block
+  /* ---------- UI ---------- */
+
   function makeFunctionRow(fn, idx){
     const row = document.createElement('div');
     row.className = 'halo-facet';
@@ -63,7 +64,6 @@
     updateNotes(); updateCounts(); paintChart();
   }
 
-  // Notes include Stage now
   function updateNotes(){
     const stageLabel = v => ({1:'Early',2:'Advancing',3:'Established'})[v] || '';
     const out = functions
@@ -78,34 +78,34 @@
     countsBadge.textContent = `Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
   }
 
-  // Label wrapping for the radar (stack long labels / break on " & ")
-  function wrapLabel(label){
+  /* ---------- Chart ---------- */
+
+  // Stack long labels (and break after " & ")
+  function stackLabel(label){
     if (!label) return label;
     if (label.includes(' & ')) return label.replace(' & ', ' &\n');
-    // generic wrap: split near middle on space if very long
     if (label.length > 18){
       const mid = Math.floor(label.length/2);
-      const leftSpace = label.lastIndexOf(' ', mid);
-      if (leftSpace > 0) return label.slice(0,leftSpace) + '\n' + label.slice(leftSpace+1);
+      const cut = label.lastIndexOf(' ', mid);
+      if (cut > 0) return label.slice(0,cut) + '\n' + label.slice(cut+1);
     }
     return label;
   }
 
-  // Chart (circular halo: small Early circle + two larger rings; no spokes)
   let haloChart = null;
   function paintChart(){
     if (haloChart) haloChart.destroy();
 
-    const labels = functions.map(f => f.name);
+    const labels = functions.map(f => stackLabel(f.name)); // << inject newlines
     const data = functions.map(f => f.stage);
 
     haloChart = new Chart(chartEl, {
       type: 'radar',
       data: {
-        labels: labels,
+        labels,
         datasets: [{
           label: 'Divine H.A.L.O.',
-          data: data,
+          data,
           fill: true,
           backgroundColor: 'rgba(255,191,0,0.25)',  // halo fill
           borderColor: '#ffbf00',                    // halo edge
@@ -118,30 +118,27 @@
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: { padding: { left: 18, right: 18 } }, // keep labels on-canvas
         plugins: { legend: { display:false } },
         scales: {
           r: {
-            // Use 0..3 ticks so we can hide the 0 ring and show 1,2,3 (3 circles)
+            // Show three visible rings (1,2,3); hide 0 baseline so the inner "Early" is a small golden circle
             min: 0,
             max: 3,
             beginAtZero: true,
             ticks: { stepSize: 1, display: false },
-            angleLines: { display: false }, // hide spiderweb spokes
+            angleLines: { display: false },
             grid: {
-              circular: true,               // circles not polygons
-              color: (ctx) => {
-                // Hide the 0 baseline; draw 1,2,3 in gold
-                return ctx.index === 0 ? 'rgba(0,0,0,0)' : '#ffbf00';
-              },
+              circular: true,
+              color: (ctx) => ctx.index === 0 ? 'rgba(0,0,0,0)' : '#ffbf00',
               lineWidth: (ctx) => {
                 const last = ctx.chart.scales.r.ticks.length - 1; // 0..3
-                if (ctx.index === 0) return 0;  // hide inner baseline at 0
+                if (ctx.index === 0) return 0;  // hide 0
                 return ctx.index === last ? 4 : 2; // thicker outer ring
               }
             },
             pointLabels:{
               color:'#1a1e36',
-              callback: (val) => wrapLabel(val),   // stack labels
               font: (ctx) => {
                 const w = ctx.chart.width;
                 return { size: w < 420 ? 11 : 13, weight:'600' };
@@ -153,7 +150,8 @@
     });
   }
 
-  // Event wiring
+  /* ---------- Events ---------- */
+
   facetList.addEventListener('input', (e)=>{
     const t = e.target;
     if (t.hasAttribute('data-name')){
@@ -195,7 +193,7 @@
 
   $('#printBtn').addEventListener('click', ()=> window.print());
 
-  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+  function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 
   // Initial paint
   renderAll();
