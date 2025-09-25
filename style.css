@@ -15,8 +15,14 @@
 
 #divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
 
-/* Logo sits above hero, no indent */
-#divine-halo .halo-brand{height:48px;width:auto;display:block;margin:0 0 8px 0}
+/* Logo sits above hero — now smaller and right-aligned */
+#divine-halo .halo-brand{
+  width:120px;           /* smaller and consistent */
+  height:auto;
+  display:block;
+  margin:0 0 8px auto;   /* right align */
+  opacity:.95;           /* soften the glare */
+}
 
 #divine-halo .halo-hero{display:block;margin-bottom:18px}
 #divine-halo h1{margin:0;font-size:30px;letter-spacing:.2px}
@@ -37,7 +43,16 @@
 #divine-halo .halo-small{font-size:12px}
 #divine-halo .halo-muted{color:#707aac}
 
-#divine-halo label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#6a74a8;margin:12px 0 6px}
+/* Field titles: larger and bolder for clarity (FUNCTION, STAGE, etc.) */
+#divine-halo label{
+  display:block;
+  font-size:14px;            /* was 12px */
+  font-weight:700;           /* stronger */
+  text-transform:uppercase;
+  letter-spacing:.10em;
+  color:#6a74a8;
+  margin:12px 0 6px;
+}
 
 #divine-halo select,
 #divine-halo input[type=text]{
@@ -60,12 +75,16 @@
   background:#fff;
 }
 
-/* Function + Stage row */
+/* Function + Stage row: prevent bumping by fixing Stage width */
 #divine-halo .halo-row{
   display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:10px;
+  grid-template-columns: 1fr 220px;   /* Function grows, Stage fixed */
+  gap:12px;
 }
+@media (max-width:720px){
+  #divine-halo .halo-row{grid-template-columns:1fr;row-gap:8px}
+}
+
 /* Quick note full width beneath */
 #divine-halo .halo-row--note{grid-template-columns:1fr;margin-top:10px}
 
