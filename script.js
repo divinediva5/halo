@@ -77,7 +77,7 @@
     countsBadge.textContent = `Early: ${c[1]} · Advancing: ${c[2]} · Established: ${c[3]}`;
   }
 
-  // Chart (circular halo: no spokes, yellow rings, thicker outer ring)
+  // Chart (circular halo: three rings at 1, 2, 3; no spokes)
   let haloChart = null;
   function paintChart(){
     if (haloChart) haloChart.destroy();
@@ -104,18 +104,21 @@
         plugins: { legend: { display:false } },
         scales: {
           r: {
-            beginAtZero:true,
-            min:0,
-            max:3,
-            ticks:{ display:false },
-            angleLines:{ display:false }, // hide spiderweb spokes
-            grid:{
-              color: ctx => '#ffbf00',     // all rings yellow
-              lineWidth: ctx => {
-                // make outer ring thicker
-                const { index, chart } = ctx;
-                const last = chart.scales.r.ticks.length - 1;
-                return index === last ? 4 : 2;
+            beginAtZero: false,
+            min: 1,                // start at 1 (no tiny inner ring)
+            max: 3,                // end at 3
+            ticks: {
+              stepSize: 1,
+              display: false
+            },
+            angleLines: { display: false }, // hide spiderweb spokes
+            grid: {
+              circular: true,      // <-- circles, not polygons
+              color: () => '#ffbf00',
+              lineWidth: (ctx) => {
+                // Make the outer ring a touch thicker
+                const last = ctx.chart.scales.r.ticks.length - 1; // 0..2 for [1,2,3]
+                return ctx.index === last ? 4 : 2;
               }
             },
             pointLabels:{
