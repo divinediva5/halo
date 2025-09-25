@@ -4,9 +4,9 @@
   --panel:#f5f7ff;
   --ink:#0f1222;
   --muted:#5c69a5;
-  --accent:#2f4dd9;        /* brand-ish blue */
-  --gold:#ffd54d;          /* halo yellow */
-  --gold-strong:#ffbf00;   /* brighter halo */
+  --accent:#2f4dd9;
+  --gold:#ffd54d;
+  --gold-strong:#ffbf00;
   --border:#e2e6fb;
   font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   color:var(--ink);
@@ -15,20 +15,31 @@
 
 #divine-halo .halo-wrap{max-width:1100px;margin:32px auto;padding:0 20px 60px}
 
-/* Logo sits above hero — now smaller and right-aligned */
+/* Logo sits above hero — smaller and right-aligned */
 #divine-halo .halo-brand{
-  width:120px;           /* smaller and consistent */
+  width:120px;
   height:auto;
   display:block;
-  margin:0 0 8px auto;   /* right align */
-  opacity:.95;           /* soften the glare */
+  margin:0 0 8px auto;
+  opacity:.95;
 }
 
+/* Hero */
 #divine-halo .halo-hero{display:block;margin-bottom:18px}
-#divine-halo h1{margin:0;font-size:30px;letter-spacing:.2px}
+#divine-halo .halo-hero-title{
+  margin:0 0 2px 0;
+  font-family:"Cinzel", serif;         /* majestic serif */
+  font-weight:700;
+  font-size:36px;
+  color:#fff;                          /* white fill */
+  -webkit-text-stroke: 1px #000;       /* black outline */
+  text-stroke: 1px #000;
+  letter-spacing:.5px;
+}
 #divine-halo .halo-h2{margin:2px 0 0;font-weight:600;color:var(--muted);font-size:18px}
 #divine-halo .halo-intro{margin:12px 0 0;font-size:16px;line-height:1.55}
 
+/* Cards & grid */
 #divine-halo .halo-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
 @media (max-width:960px){#divine-halo .halo-grid{grid-template-columns:1fr}}
 
@@ -43,17 +54,18 @@
 #divine-halo .halo-small{font-size:12px}
 #divine-halo .halo-muted{color:#707aac}
 
-/* Field titles: larger and bolder for clarity (FUNCTION, STAGE, etc.) */
+/* Field titles — bolded for FUNCTION / STAGE / QUICK NOTE */
 #divine-halo label{
   display:block;
-  font-size:14px;            /* was 12px */
-  font-weight:700;           /* stronger */
+  font-size:14px;
+  font-weight:700;              /* bold */
   text-transform:uppercase;
   letter-spacing:.10em;
   color:#6a74a8;
   margin:12px 0 6px;
 }
 
+/* Inputs */
 #divine-halo select,
 #divine-halo input[type=text]{
   width:100%;
@@ -65,6 +77,11 @@
   outline:none;
 }
 #divine-halo select{appearance:auto}
+
+/* Make Quick Notes content italic */
+#divine-halo .halo-row--note input[type=text]{
+  font-style: italic;
+}
 
 /* Function block */
 #divine-halo .halo-facet{
@@ -107,7 +124,7 @@
 }
 #divine-halo .halo-btn-ghost{background:#fff;border-style:dashed}
 
-/* Chart */
+/* Chart canvas */
 #divine-halo canvas{
   background:#fff;
   border-radius:16px;
